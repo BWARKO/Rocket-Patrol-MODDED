@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            fixedWidth: 0
         }
     }
 
@@ -50,6 +50,7 @@ class Play extends Phaser.Scene {
         this.gameTime = game.settings.gameTimer
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, this.textConfig)
+        this.highScoreMid = this.add.text(game.config.width/2, borderUISize + borderPadding*2, `Highscore: ${highscore}`, this.textConfig).setOrigin(0.5, 0)
         this.timeRight = this.add.text(game.config.width - (borderUISize + borderPadding), borderUISize + borderPadding*2, this.gameTime, this.textConfig).setOrigin(1,0)
 
 
@@ -57,7 +58,6 @@ class Play extends Phaser.Scene {
         this.gameOver = false
         this.timerTick = false
 
-        this.textConfig.fixedWidth = 0
 
        
 
@@ -69,11 +69,15 @@ class Play extends Phaser.Scene {
         this.planet.tilePositionX -= 0.5
         this.moon.tilePositionX -= 1
 
-
         if(this.gameTime <= 0) {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', this.textConfig).setOrigin(0.5)
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', this.textConfig).setOrigin(0.5)
             this.gameOver = true
+
+            if(this.p1Score > highscore){
+                highscore = this.p1Score
+                this.highScoreMid.text = `NEW HS: ${highscore}`
+            }
         }
 
         if(!this.timerTick && !this.gameOver) {
