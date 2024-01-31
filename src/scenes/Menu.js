@@ -7,6 +7,7 @@ class Menu extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png')
         this.load.image('spaceship', './assets/spaceship.png')
+        this.load.image('ufo', './assets/ufoship.png')
         this.load.image('starfield', './assets/starfield.png')
         this.load.spritesheet('explosion', './assets/explosion.png', {
             frameWidth: 64,
@@ -43,7 +44,7 @@ class Menu extends Phaser.Scene {
         }
 
         // display menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL CRACKED', menuConfig).setOrigin(0.5)
         this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5)
         menuConfig.backgroundColor = '#00FF00'
         menuConfig.color = '#000'
@@ -58,16 +59,16 @@ class Menu extends Phaser.Scene {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 60000
+                gameTimer: 60
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')
         }
         if(Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            // easy mode
+            // hard mode
             game.settings = {
                 spaceshipSpeed: 4,
-                gameTimer: 45000
+                gameTimer: 45
             }
             this.sound.play('sfx-select')
             this.scene.start('playScene')

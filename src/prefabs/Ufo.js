@@ -1,14 +1,14 @@
-class Spaceship extends Phaser.GameObjects.Sprite {
+class Ufo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, pointValue, timeValue) {
         super(scene, x, y, texture, frame)
         scene.add.existing(this)
         this.points = pointValue
         this.time = timeValue
-        this.moveSpeed = game.settings.spaceshipSpeed
+        this.moveSpeed = game.settings.spaceshipSpeed * 3
     }
 
     update() {
-        // move spaceship left
+        // move ufo left
         this.x -= this.moveSpeed
 
         // wrap from left to right ede
