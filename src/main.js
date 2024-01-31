@@ -9,6 +9,8 @@
 //      3 POINT MODS:
 //          TIMER: Top right, shows time remaining
 //          PARALLAXING: Moon > Planet > Starfield (Faster/Closer -> Slower/Farther)
+//      1 POINT MODS:
+//          HIGHSCORE TRACKER: Highscore that tracks across scenes.
 
 let config = {
     type: Phaser.AUTO,
