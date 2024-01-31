@@ -19,6 +19,8 @@ class Play extends Phaser.Scene {
     create() {
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0)
+        this.planet = this.add.tileSprite(320, 0, 640, 480, 'planet').setOrigin(0.5, 0).setScale(10)
+        this.moon = this.add.tileSprite(320, 40, 640, 480, 'moon').setOrigin(0.5).setScale(8)
         
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0)
@@ -62,6 +64,12 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // scroll backgrounds
+        this.starfield.tilePositionX -= 1
+        this.planet.tilePositionX -= 0.5
+        this.moon.tilePositionX -= 1
+
+
         if(this.gameTime <= 0) {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', this.textConfig).setOrigin(0.5)
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', this.textConfig).setOrigin(0.5)
@@ -72,9 +80,6 @@ class Play extends Phaser.Scene {
             this.clock = this.time.delayedCall(1000, this.secondTick, null, this)
             this.timerTick = true
         }
-
-        // scroll background
-        this.starfield.tilePositionX -= 4
 
         // game over key options
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
