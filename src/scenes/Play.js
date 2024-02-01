@@ -36,6 +36,16 @@ class Play extends Phaser.Scene {
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30, 5).setOrigin(0, 0)
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, 3).setOrigin(0, 0)
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10, 1).setOrigin(0, 0)
+        // check direction and flip if needed
+        if (this.ship01.randomDir < 0) {
+            this.ship01.flipX = true
+        }
+        if (this.ship02.randomDir < 0) {
+            this.ship02.flipX = true
+        }
+        if (this.ship03.randomDir < 0) {
+            this.ship03.flipX = true
+        }
         //add UFO
         this.ufo = new Ufo(this, game.config.width, borderUISize*7 + borderPadding*6, 'ufo', 0, 100, 10).setOrigin(0, 0)
 
@@ -50,6 +60,7 @@ class Play extends Phaser.Scene {
         this.gameTime = game.settings.gameTimer
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, this.textConfig)
+        this.midFire = this.add.text(game.config.width/2, borderUISize + borderPadding*6, 'FIRE', this.textConfig).setOrigin(0.5, 0).setAlpha(0)
         this.highScoreMid = this.add.text(game.config.width/2, borderUISize + borderPadding*2, `Highscore: ${highscore}`, this.textConfig).setOrigin(0.5, 0)
         this.timeRight = this.add.text(game.config.width - (borderUISize + borderPadding), borderUISize + borderPadding*2, this.gameTime, this.textConfig).setOrigin(1,0)
 
@@ -57,15 +68,11 @@ class Play extends Phaser.Scene {
         // Flags
         this.gameOver = false
         this.timerTick = false
-
-
-       
-
     }
 
     update() {
         // scroll backgrounds
-        this.starfield.tilePositionX -= 1
+        this.starfield.tilePositionX -= 4
         this.planet.tilePositionX -= 0.5
         this.moon.tilePositionX -= 1
 
@@ -90,6 +97,7 @@ class Play extends Phaser.Scene {
             this.scene.restart()
         }
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.scene.restart()
             this.scene.start('menuScene')
         }
 
@@ -107,26 +115,33 @@ class Play extends Phaser.Scene {
         }
 
         // check collisions
-        if(this.checkCollision(this.p1Rocket, this.ship01)) {
+        if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset()
             this.shipExplode(this.ship01)
         }
-        if(this.checkCollision(this.p1Rocket, this.ship02)) {
+        if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset()
             this.shipExplode(this.ship02)
         }
-        if(this.checkCollision(this.p1Rocket, this.ship03)) {
+        if (this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset()
             this.shipExplode(this.ship03)
         }
         // ufo collision check
-        if(this.checkCollision(this.p1Rocket, this.ufo)) {
+        if (this.checkCollision(this.p1Rocket, this.ufo)) {
             this.p1Rocket.reset()
             this.shipExplode(this.ufo)
         }
 
+        // active fire UI
+        if (this.p1Rocket.isFiring) {
+            this.midFire.setAlpha(1)
+        } else {
+            this.midFire.setAlpha(0)
+        }
+
         // check if rocket missed for time penalty
-        if(this.p1Rocket.missed){
+        if (this.p1Rocket.missed) {
             // subtract and update time and unflag
             this.gameTime -= 3
             this.p1Rocket.missed = false
